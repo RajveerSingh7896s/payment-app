@@ -5,10 +5,11 @@
         "@prisma/client": "^5.11.0"
     },
     "devDependencies": {
+        "@types/node": "^20.19.40",
         "prisma": "5.11.0"
     },
     "exports": {
-        "./client": "./index.ts"
+        "./client": "./dist/index.js"
     },
     "prisma": {
         "seed": "ts-node prisma/seed.ts"

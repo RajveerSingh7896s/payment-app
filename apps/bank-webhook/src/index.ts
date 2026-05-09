@@ -1,7 +1,9 @@
 import express from "express";
-import db from "@repo/db/client";
+import db from "../../../packages/db/dist";
 
 const app = express();
+app.use(express.json());
+
 
 app.post("/hdfcWebhook", async (req, res) => {
   // add zod validations
@@ -12,6 +14,17 @@ app.post("/hdfcWebhook", async (req, res) => {
     amount: req.body.amount,
   };
 
+  const tnx = await db.onRampTransaction.findFirst({
+      where: {
+        token: paymentInformation.token,
+      }
+  })
+
+  if(tnx?.status != "Processing"){
+    return res.status(411).json({
+      message: "request already processed.",
+    });
+  }
   try {
     await db.$transaction([
       db.balance.update({
@@ -43,4 +56,8 @@ app.post("/hdfcWebhook", async (req, res) => {
     });
   }
   // update balance in db
+});
+
+app.listen(3003, () => {
+  console.log("Bank webhook listening on port 3003");
 });
