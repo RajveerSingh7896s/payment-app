@@ -5,6 +5,7 @@ import { Select } from "@repo/ui/select";
 import { useState } from "react";
 import { TextInput } from "@repo/ui/textinput";
 import { createOnRampTransaction } from "../app/lib/actions/createOnRamptxn";
+import { updateBalance } from "../app/lib/actions/updateBalance";
 
 const SUPPORTED_BANKS = [
   {
@@ -51,6 +52,7 @@ export const AddMoney = () => {
             onClick={async () => {
               await createOnRampTransaction(amount,provider) ; 
               window.location.href = redirectUrl || "";
+              await updateBalance() ;
             }}
           >
             Add Money

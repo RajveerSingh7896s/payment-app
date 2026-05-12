@@ -4,7 +4,6 @@ import db from "../../../packages/db/dist";
 const app = express();
 app.use(express.json());
 
-
 app.post("/hdfcWebhook", async (req, res) => {
   // add zod validations
   //use webhook secret to choose that the req actually came from hdfc bank.
@@ -15,12 +14,12 @@ app.post("/hdfcWebhook", async (req, res) => {
   };
 
   const tnx = await db.onRampTransaction.findFirst({
-      where: {
-        token: paymentInformation.token,
-      }
-  })
+    where: {
+      token: paymentInformation.token,
+    },
+  });
 
-  if(tnx?.status != "Processing"){
+  if (tnx?.status != "Processing") {
     return res.status(411).json({
       message: "request already processed.",
     });
@@ -51,9 +50,17 @@ app.post("/hdfcWebhook", async (req, res) => {
     });
   } catch (e) {
     console.log(e);
-    res.status(411).json({
-      message: "Error while processing webhook",
-    });
+    db.onRampTransaction.update({
+      where: {
+        token: paymentInformation.token,
+      },
+      data: {
+        status: "Failure",
+      },
+    }),
+      res.status(411).json({
+        message: "Error while processing webhook",
+      });
   }
   // update balance in db
 });
