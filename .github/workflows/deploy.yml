@@ -28,3 +28,15 @@ jobs:
 
       - name: Verify Pushed image
         run: docker pull rajveersingh7896/payment-app-user:latest
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with: 
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }} 
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+          sudo docker pull rajveersingh7896/payment-app-user:latest 
+          sudo docker stop payment-app-user || true
+          sudo docker rm payment-app-user || true
+          sudo docker run -d --name payment-app-user -p 3005:3000 rajveersingh7896/payment-app-user:latest 
