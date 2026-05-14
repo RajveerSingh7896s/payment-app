@@ -36,7 +36,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }} 
           key: ${{ secrets.SSH_KEY }}
           script: |
-          sudo docker pull rajveersingh7896/payment-app-user:latest 
-          sudo docker stop payment-app-user || true
-          sudo docker rm payment-app-user || true
-          sudo docker run -d --name payment-app-user -p 3005:3000 rajveersingh7896/payment-app-user:latest 
+            sudo docker pull rajveersingh7896/payment-app-user:latest 
+            sudo docker stop payment-app-user || true
+            sudo docker rm payment-app-user || true
+            sudo docker run -d --name payment-app-user -p 3005:3000 rajveersingh7896/payment-app-user:latest 
