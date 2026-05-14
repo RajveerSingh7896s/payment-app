@@ -39,4 +39,11 @@ jobs:
             sudo docker pull rajveersingh7896/payment-app-user:latest 
             sudo docker stop payment-app-user || true
             sudo docker rm payment-app-user || true
-            sudo docker run -d --name payment-app-user --restart always -e "DATABASE_URL=${{ secrets.DB_URL }}" -p 3005:3000 rajveersingh7896/payment-app-user:latest
+            sudo docker run -d \
+            --name payment-app-user \
+            --restart always \
+            -e "DATABASE_URL=${{ secrets.DB_URL }}" \
+            -e "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" \
+            -e "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
+            -p 3005:3000 \
+            rajveersingh7896/payment-app-user:latest
